@@ -80,6 +80,54 @@ void turn(short int angle, short int turnspeed){
   exangle = angle;
 }
 
+void turnAngled(short int tireAngle, short int targetAngle) // Turn function that uses compass to turn desired angle (real angle).
+{    
+  int lastAngle = exangle; // Save tire angle to turn afterwards
+  int pingDelay = 100; // Delay for reading compass module
+  int realAngle = 0; // 0 is placeholder for compass read!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  int startingAngle = realAngle; // save starting angle (real compass angle) to memory
+  boolean overflowPos = false; // Overflow if targetAngle > 359
+  boolean overflowNeg = false; // Overflow if targetAngle < 0
+  
+  // Set targetAngle to "real" angle
+  targetAngle = realAngle + targetAngle;
+  
+  if (targetAngle < 0) // Check if there is negative overflow in turning angle (example. targetAngle is -30 and real angle is 20 wich leads to targetAngle being -10, this changes it to 269)
+  {
+    targetAngle = 359 + targetAngle;
+    overflowNeg = true;
+  }
+   else if (targetAngle > 359) // Check if there is positive overflow in turning angle
+  {
+    targetAngle = targetAngle - 359;
+    overflowPos = true;
+  }
+  
+  if (realAngle != targetAngle) // Check if angle is not already magically right
+  {  
+    // Turn tires to wanted turning angle angle
+    turn(tireAngle, 5);
+    
+    if (realAngle > targetAngle || overflowNeg==true) // Check turning direction
+    {
+      while (realAngle > targetAngle || overflowNeg==true && realAngle < startingAngle) // delay loop wich checks if car is turning in allowed angles
+      {
+        delay(pingDelay);
+        realAngle = 0; //0 is placeholder for compass read!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      }  
+    }
+    else 
+    {
+      while (realAngle < targetAngle || overflowPos==true && realAngle > startingAngle) // same as above but to other directon
+      {
+        delay(pingDelay);
+        realAngle = 0; //0 is placeholder for compass read!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      }
+    }
+    turn(lastAngle, 5); // turn tires back to las angle
+  }
+}
+
 
 void accelFast(short int accelSpeed, unsigned short int accelTime){
   
