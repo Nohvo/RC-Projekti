@@ -1,18 +1,25 @@
-#include"Ohjelmat.h"
-#include<Servo.h>
-#include<NewPing.h>
+#include"Ohjelmat.h">
 
-const short int startButtonPin = 2;        // the number of the pushbutton pin
 short int startButtonState = 0;         // variable for reading the pushbutton status
 
-void start(){
-	turn(1, 5);
+Ohjelma::Ohjelma(){}
+Ohjelma::~Ohjelma(){}
+
+void Ohjelma::start(){
+  // Setup sonars
+  NewPing sonar1(TRIGGER_PIN, ECHO_PIN1, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
+  NewPing sonar2(TRIGGER_PIN, ECHO_PIN2, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
+  NewPing sonar3(TRIGGER_PIN, ECHO_PIN3, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
+
+  //Ohjaus::attachServos();
+ 
+	Ohjaus::turn(1, 5);
 	int rightSonar;
 	int leftSonar;
 	int frontSonar;
 	int brake = 0;
 	Serial.println("Start");
-	servoaccel.write(84);
+	Ohjaus::accelerate(84);
 	while (1){
 		delay(32);
 		rightSonar = sonar1.ping_cm();
@@ -35,25 +42,26 @@ void start(){
 		Serial.print(" oikea-> ");
 		Serial.println(rightSonar);
 		if (frontSonar < 300) {
-			turn(25, 5);
+			Ohjaus::turn(25, 5);
 			delay(300);
-			turn(0, 5);
+			Ohjaus::turn(0, 5);
 			delay(800);
-			turn(-25, 5);
+			Ohjaus::turn(-25, 5);
 			delay(300);
-			turn(0, 5);
+			Ohjaus::turn(0, 5);
 			delay(400);
-			turn(-25, 5);
+			Ohjaus::turn(-25, 5);
 			delay(120);
-			turn(0, 5);
+			Ohjaus::turn(0, 5);
 			delay(700);
-			turn(25, 5);
+			Ohjaus::turn(25, 5);
 			delay(120);
-			turn(0, 5);
+			Ohjaus::turn(0, 5);
 			delay(50);
-			servoaccel.write(95);
-			servoaccel.write(90);
+			Ohjaus::accelerate(95);
+			Ohjaus::accelerate(90);
 			delay(70000);
 		}
 	}
 }
+

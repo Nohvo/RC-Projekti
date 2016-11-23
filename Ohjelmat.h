@@ -1,5 +1,11 @@
-
 #include"Sensorit.h"
 #include"Ohjaus.h"
 
-void start();
+class Ohjelma:
+public Ohjaus
+{
+  public:
+  Ohjelma();
+  ~Ohjelma();
+  void start();
+};

@@ -8,19 +8,17 @@ http://www.arduino.cc/en/Tutorial/Knob
 */
 
 #include"Ohjelmat.h"
-#include<Servo.h>
+
+Ohjelma device;
 
 void setup() {
-	Serial.begin(115200);
-  servoturn.attach(9);            // attaches the turning servo on pin to the servo object
-  servoaccel.attach(10);          // attaches the acceleration servo on pin to the servo object
+	//Serial.begin(115200);
+
+  
+  device.attachServos();
 	pinMode(startButtonPin, INPUT); // initialize the pushbutton pin as an input
 }
 
 void loop() {
-
-
-	track();    // main moving function
-
-
+	device.track();    // main moving function
 }
